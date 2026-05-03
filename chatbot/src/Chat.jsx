@@ -4,30 +4,61 @@ import Messages from "./Messages.jsx";
 
 function Chat() {
   const [userMessage, setUserMessage] = useState("");
-  const [messageList, setMessageList] = useState([]);
-  const [responseList, setResponseList] = useState([
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-  ]);
+  const [chat, setChat] = useState([]);
 
   const bottomRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messageList, responseList]);
+  }, [chat]);
 
-  const handleSubmit = (e) => {
+  async function sendMessage(userMessage) {
+    const response = await fetch("http://127.0.0.1:8000/chat_request", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: "prashant",
+        message: userMessage,
+      }),
+    });
+
+    const data = await response.json();
+
+    const reply = data.reply;
+    return reply;
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (userMessage.trim() === "") return;
 
-    setMessageList([...messageList, userMessage]);
+    setChat((prev) => [
+      ...prev,
+      { type: "user", text: userMessage },
+      { type: "bot", text: "Wait..." },
+    ]);
     setUserMessage("");
+
+    try {
+      const response = await sendMessage(userMessage);
+
+      setChat((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = { type: "bot", text: response };
+        return updated;
+      });
+    } catch (err) {
+      setChat((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
+          type: "bot",
+          text: "Error getting response",
+        };
+        return updated;
+      });
+    }
   };
 
   return (
@@ -47,18 +78,29 @@ function Chat() {
         <div className="container">
           <div className="chat-area">
             <div className="area">
-              <Messages messageList={messageList} responseList={responseList} />
+              <Messages chat={chat} />
               <div ref={bottomRef}></div>
             </div>
           </div>
           <div className="send-text">
             <form action="" className="form2" onSubmit={handleSubmit}>
-              <input
-                type="text"
+              <textarea
+                autoFocus
                 placeholder="Ask any question"
                 className="text"
                 value={userMessage}
-                onChange={(e) => setUserMessage(e.target.value)}
+                onChange={(e) => {
+                  setUserMessage(e.target.value);
+
+                  e.target.style.height = "auto";
+                  e.target.style.height = e.target.scrollHeight + "px";
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
+                }}
               />
               <button type="button" className="attach-file">
                 <svg

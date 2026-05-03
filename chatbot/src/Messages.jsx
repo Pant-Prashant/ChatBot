@@ -1,14 +1,13 @@
-import React from "react";
 import "./Messages.css";
 
-function Messages({ messageList, responseList }) {
+function Messages({ chat }) {
   return (
     <ul className="list">
-      {messageList.map((msg, index) => (
-        <React.Fragment key={index}>
-          <li>
+      {chat.map((msg, index) => (
+        <li key={index}>
+          {msg.type === "user" ? (
             <div className="list-div-user">
-              <div className="user-message">{msg}</div>
+              <div className="user-message">{msg.text}</div>
               <div className="user-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -22,8 +21,7 @@ function Messages({ messageList, responseList }) {
                 </svg>
               </div>
             </div>
-          </li>
-          <li>
+          ) : (
             <div className="list-div-bot">
               <div className="bot-icon">
                 <svg
@@ -38,10 +36,10 @@ function Messages({ messageList, responseList }) {
                   <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5" />
                 </svg>
               </div>
-              <div className="bot-message">{responseList[index]}</div>
+              <div className="bot-message">{msg.text}</div>
             </div>
-          </li>
-        </React.Fragment>
+          )}
+        </li>
       ))}
     </ul>
   );
