@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import "./Chat.css";
 import Messages from "./Messages.jsx";
 
-function Chat() {
+function Chat({ username }) {
   const [userMessage, setUserMessage] = useState("");
   const [chat, setChat] = useState([]);
 
@@ -19,7 +19,7 @@ function Chat() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: "prashant",
+        name: username,
         message: userMessage,
       }),
     });
@@ -91,9 +91,6 @@ function Chat() {
                 value={userMessage}
                 onChange={(e) => {
                   setUserMessage(e.target.value);
-
-                  e.target.style.height = "auto";
-                  e.target.style.height = e.target.scrollHeight + "px";
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {

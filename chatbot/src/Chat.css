@@ -111,7 +111,7 @@ button:hover {
   resize: none;
   overflow-y: auto;
   scrollbar-width: none;
-  padding: 5px 15px; /* 🔥 reduced */
+  padding: 5px 15px;
 }
 .submit,
 .attach-file {
