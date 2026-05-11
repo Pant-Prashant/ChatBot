@@ -14,12 +14,14 @@
   align-items: center;
   justify-content: space-between;
   height: 80%;
+  min-height: 500px;
   width: 40%;
   min-width: 300px;
   background-color: rgb(255, 255, 255);
   border-radius: 5px;
   box-shadow: rgb(139, 139, 139) 0px 10px 30px;
   padding: 35px 10px;
+  padding-top: 25px;
 }
 
 .name {
