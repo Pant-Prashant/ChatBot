@@ -19,7 +19,7 @@ chat_history={}
 
 llm=ChatOpenAI(
   base_url="https://openrouter.ai/api/v1",
-  api_key="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",
+  api_key="Your API Key",
   model="openai/gpt-oss-120b:free"
 )
 
