@@ -4,14 +4,15 @@ from langchain_core.messages import HumanMessage, AIMessage
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-
+from sqlalchemy import create_engine, Column, String
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 
 class Request(BaseModel):
     name:str
     message:str
 
-class LoginInfo(BaseModel):
+class IdPass(BaseModel):
     username:str
     password:str
 
@@ -19,7 +20,7 @@ chat_history={}
 
 llm=ChatOpenAI(
   base_url="https://openrouter.ai/api/v1",
-  api_key="ENTER YOUR API KEY",
+  api_key="KEY",
   model="openai/gpt-oss-120b:free"
 )
 
@@ -34,6 +35,18 @@ prompt = ChatPromptTemplate(
 
 chain = prompt | llm
 
+DATABASE_URL = "postgresql://postgres:password@localhost/chatbotdb"
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(bind=engine)
+Base = declarative_base()
+
+class LoginInfoTable(Base):
+    __tablename__="Users Login"
+    name=Column(String, primary_key=True, unique=True)
+    password=Column(String)
+
+Base.metadata.create_all(bind=engine)
+
 app=FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -47,8 +60,43 @@ app.add_middleware(
 def root():
     return {'message':'Welcome to the chatbot'}
 
+@app.post("/sign-up")
+def signup(signup_info:IdPass):
+    db=SessionLocal()
+    try:
+        all_users=db.query(LoginInfoTable).all()
+
+        for user in all_users:
+            if user.name==signup_info.username:
+                return {"message":"User already exists."}
+
+        new_user=LoginInfoTable(
+            name=signup_info.username,
+            password=signup_info.password
+        )
+        db.add(new_user)
+        db.commit()
+    finally:
+        db.close()
+
 @app.post('/login')
-def login(logininfo:LoginInfo):
+def login(login_info:IdPass):
+    db = SessionLocal()
+    try:
+        all_users = db.query(LoginInfoTable).all()
+
+        for user in all_users:
+
+            if user.name == login_info.username:
+                if user.password == login_info.password:
+                    return {"message": "OK"}
+                else:
+                    return {"message": "Incorrect password."}
+
+        return {"message": "User does not exists."}
+
+    finally:
+        db.close()
 
 
 @app.post('/chat_request')

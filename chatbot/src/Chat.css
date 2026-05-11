@@ -16,19 +16,20 @@
   border-bottom: groove black 2px;
 }
 
-button {
+.top-button {
   margin: 0 5px;
   height: 35px;
   border: none;
   background: none;
   cursor: pointer;
   width: 100px;
+  transition: all 0.2s;
+  border-radius: 10px;
 }
 
-button:hover {
-  background: rgb(133, 133, 133);
-  box-shadow: black 0 0 10px;
-  border-radius: 10px;
+.top-button:hover {
+  background: rgb(35, 35, 35);
+  color: white;
 }
 
 .title {
@@ -113,8 +114,10 @@ button:hover {
   scrollbar-width: none;
   padding: 5px 15px;
 }
+
 .submit,
 .attach-file {
+  margin: 0 5px;
   padding-top: 5px;
   width: 45px;
   height: 45px;
@@ -124,6 +127,7 @@ button:hover {
   border-radius: 50%;
   background: white;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
 .submit:hover,

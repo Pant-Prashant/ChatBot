@@ -66,11 +66,11 @@ function Chat({ username }) {
       <div className="header">
         <div className="title">ChatBot</div>
         <div style={{ display: "flex" }}>
-          <button>Home</button>
+          <button className="top-button">Home</button>
           <div
             style={{ height: "35px", width: "1px", background: "black" }}
           ></div>
-          <button>Chat History</button>
+          <button className="top-button">Chat History</button>
         </div>
       </div>
       <div className="main-body">
