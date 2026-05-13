@@ -41,13 +41,13 @@
   box-shadow: black 0 0 10px;
 }
 
-.welcome-message {
+.text1 {
   text-align: center;
   margin: 0;
   font-size: 40px;
 }
 
-.message {
+.text2 {
   margin: 0;
   margin-bottom: 10px;
   font-size: 20px;
@@ -76,20 +76,13 @@
   background: transparent;
 }
 
-.login-button {
+.button-div {
   width: 75%;
   min-width: 280px;
-  height: 40px;
-  background-color: rgb(0, 123, 255);
-  border-radius: 5px;
-  color: white;
-  border: solid transparent 2px;
-  transition: all 0.2s;
-  cursor: pointer;
 }
 
-.sign-up-button {
-  width: 75%;
+.login-button {
+  width: 100%;
   min-width: 280px;
   height: 40px;
   background-color: white;
@@ -100,20 +93,58 @@
   cursor: pointer;
 }
 
+.sign-up-button {
+  width: 100%;
+  min-width: 280px;
+  height: 40px;
+  background-color: rgb(0, 123, 255);
+  border-radius: 5px;
+  color: white;
+  border: solid transparent 2px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
 .login-button:hover,
 .sign-up-button:hover {
   font-weight: 600;
   box-shadow: rgb(0, 0, 0) 0px 0px 5px;
 }
 
+.divider {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #777;
+  margin: 6px 0px;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #d3d3d3;
+}
+
+.divider span {
+  padding: 0 8px;
+}
+
 @media (max-width: 1200px) {
-  .welcome-message {
+  .text1 {
     font-size: 35px;
+  }
+  .text2 {
+    font-size: 18px;
   }
 }
 
-@media (max-width: 800px) {
-  .welcome-message {
-    font-size: 30px;
+@media (max-width: 915px) {
+  .text1 {
+    font-size: 28px;
+  }
+  .text2 {
+    font-size: 15px;
   }
 }

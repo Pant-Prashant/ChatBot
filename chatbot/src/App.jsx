@@ -3,6 +3,7 @@ import { useState } from "react";
 import "./App.css";
 import Welcome from "./Welcome";
 import Chat from "./Chat";
+import SignUp from "./SignUp";
 import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Welcome setUsername={setUsername} />}></Route>
-
+        <Route path="/sign_up" element={<SignUp />}></Route>
         <Route
           path="/chat"
           element={

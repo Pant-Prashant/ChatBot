@@ -1,10 +1,11 @@
+import styles from "./SignUp.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Welcome.css";
 
-function Welcome({ setUsername }) {
+function SignUp({ setUsername }) {
   let [name, setName] = useState("");
   let [password, setPassword] = useState("");
+  let [password2, setPassword2] = useState("");
   let nevigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -16,13 +17,13 @@ function Welcome({ setUsername }) {
     nevigate("/chat");
   };
 
-  const handleSighUp = () => {
-    nevigate("/sign_up");
+  const handleLogin = () => {
+    nevigate("/");
   };
 
   return (
-    <div className="main">
-      <div className="inner-div">
+    <div className={styles["main"]}>
+      <div className={styles["inner-div"]}>
         <div>
           <div
             style={{
@@ -57,9 +58,9 @@ function Welcome({ setUsername }) {
             <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5" />
           </svg>
         </div>
-        <h1 className="welcome-message">Welcome to the Chatbot!</h1>
-        <h5 className="message">Login to get started.</h5>
-        <div className="input-div">
+        <h1 className={styles["text1"]}>Create your Account</h1>
+        <h5 className={styles["text2"]}>Enter details to get started</h5>
+        <div className={styles["input-div"]}>
           <svg
             style={{
               color: "#a4a4a4",
@@ -76,14 +77,14 @@ function Welcome({ setUsername }) {
           <input
             type="text"
             placeholder="Username"
-            className="textbox"
+            className={styles["textbox"]}
             onChange={(e) => {
               setName(e.target.value);
             }}
           />
         </div>
 
-        <div className="input-div">
+        <div className={styles["input-div"]}>
           <svg
             style={{
               color: "#a4a4a4",
@@ -103,22 +104,64 @@ function Welcome({ setUsername }) {
           <input
             type="text"
             placeholder="Password"
-            className="textbox"
+            className={styles["textbox"]}
             onChange={(e) => {
               setPassword(e.target.value);
             }}
           />
         </div>
 
-        <button type="button" className="login-button" onClick={handleSubmit}>
-          Login
-        </button>
-        <button type="button" className="sign-up-button" onClick={handleSighUp}>
-          Sign Up
-        </button>
+        <div className={styles["input-div"]}>
+          <svg
+            style={{
+              color: "#a4a4a4",
+            }}
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            fill="currentColor"
+            class="bi bi-lock"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4M4.5 7A1.5 1.5 0 0 0 3 8.5v5A1.5 1.5 0 0 0 4.5 15h7a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 11.5 7zM8 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3"
+            />
+          </svg>
+          <input
+            type="text"
+            placeholder="Confirm Password"
+            className={styles["textbox"]}
+            onChange={(e) => {
+              setPassword2(e.target.value);
+            }}
+          />
+        </div>
+
+        <div className={styles["button-div"]}>
+          <button
+            type="button"
+            className={styles["sign-up-button"]}
+            onClick={handleSubmit}
+          >
+            Sign Up
+          </button>
+
+          <div className={styles["divider"]}>
+            <span>or</span>
+          </div>
+
+          <button
+            type="button"
+            className={styles["login-button"]}
+            onClick={handleLogin}
+          >
+            Already have an account? <b>Login</b>
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Welcome;
+export default SignUp;
