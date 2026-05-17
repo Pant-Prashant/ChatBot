@@ -41,7 +41,7 @@ SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
 class LoginInfoTable(Base):
-    __tablename__="Users Login"
+    __tablename__="logininfo"
     name=Column(String, primary_key=True, unique=True)
     password=Column(String)
 
@@ -68,7 +68,7 @@ def signup(signup_info:IdPass):
 
         for user in all_users:
             if user.name==signup_info.username:
-                return {"message":"User already exists."}
+                return {"message":"user already exists"}
 
         new_user=LoginInfoTable(
             name=signup_info.username,
@@ -76,6 +76,7 @@ def signup(signup_info:IdPass):
         )
         db.add(new_user)
         db.commit()
+        return {"message": "OK"}
     finally:
         db.close()
 
@@ -91,9 +92,9 @@ def login(login_info:IdPass):
                 if user.password == login_info.password:
                     return {"message": "OK"}
                 else:
-                    return {"message": "Incorrect password."}
+                    return {"message": "incorrect password"}
 
-        return {"message": "User does not exists."}
+        return {"message": "user does not exists"}
 
     finally:
         db.close()

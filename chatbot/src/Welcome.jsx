@@ -5,19 +5,62 @@ import "./Welcome.css";
 function Welcome({ setUsername }) {
   let [name, setName] = useState("");
   let [password, setPassword] = useState("");
-  let nevigate = useNavigate();
+  let navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const preventSpace = (e) => {
+    if (e.key === " ") {
+      e.preventDefault();
+    }
+  };
 
-    if (!name.trim()) return;
+  async function allowAccess(name, password) {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: name,
+          password: password,
+        }),
+      });
 
-    setUsername(name);
-    nevigate("/chat");
+      const data = await response.json();
+
+      const reply = data.message;
+      return reply;
+    } catch (error) {
+      return "Server Error!";
+    }
+  }
+
+  let [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async () => {
+    if (!name.trim()) {
+      setErrorMessage("username is required");
+      return;
+    }
+
+    if (!password.trim()) {
+      setErrorMessage("please enter the password");
+      return;
+    }
+
+    let loginStatusMessage = await allowAccess(name, password);
+
+    if (loginStatusMessage == "OK") {
+      setUsername(name);
+      navigate("/chat");
+    }
+
+    setErrorMessage(loginStatusMessage);
+    return;
   };
 
   const handleSighUp = () => {
-    nevigate("/sign_up");
+    navigate("/sign_up");
   };
 
   return (
@@ -80,6 +123,7 @@ function Welcome({ setUsername }) {
             onChange={(e) => {
               setName(e.target.value);
             }}
+            onKeyDown={preventSpace}
           />
         </div>
 
@@ -107,9 +151,15 @@ function Welcome({ setUsername }) {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
+            onKeyDown={preventSpace}
           />
         </div>
 
+        {errorMessage != "" && (
+          <p style={{ color: "red", fontSize: "15px", margin: "0px" }}>
+            **{errorMessage}**
+          </p>
+        )}
         <button type="button" className="login-button" onClick={handleSubmit}>
           Login
         </button>

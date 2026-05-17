@@ -6,19 +6,65 @@ function SignUp({ setUsername }) {
   let [name, setName] = useState("");
   let [password, setPassword] = useState("");
   let [password2, setPassword2] = useState("");
-  let nevigate = useNavigate();
+  let navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const preventSpace = (e) => {
+    if (e.key === " ") {
+      e.preventDefault();
+    }
+  };
 
-    if (!name.trim()) return;
+  async function allowSignUp(name, password) {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/sign-up", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: name,
+          password: password,
+        }),
+      });
 
-    setUsername(name);
-    nevigate("/chat");
+      const data = await response.json();
+
+      const reply = data.message;
+      return reply;
+    } catch (error) {
+      return "Server Error!";
+    }
+  }
+
+  let [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async () => {
+    if (!name.trim()) {
+      setErrorMessage("username is required");
+      return;
+    }
+
+    if (!password.trim()) {
+      setErrorMessage("please enter the password");
+      return;
+    }
+
+    if (password != password2) {
+      setErrorMessage("passwords do not match");
+      return;
+    }
+
+    let signUpMessage = await allowSignUp(name, password);
+    if (signUpMessage == "OK") {
+      setUsername(name);
+      navigate("/chat");
+    }
+
+    setErrorMessage(signUpMessage);
   };
 
   const handleLogin = () => {
-    nevigate("/");
+    navigate("/");
   };
 
   return (
@@ -81,6 +127,7 @@ function SignUp({ setUsername }) {
             onChange={(e) => {
               setName(e.target.value);
             }}
+            onKeyDown={preventSpace}
           />
         </div>
 
@@ -108,6 +155,7 @@ function SignUp({ setUsername }) {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
+            onKeyDown={preventSpace}
           />
         </div>
 
@@ -135,9 +183,14 @@ function SignUp({ setUsername }) {
             onChange={(e) => {
               setPassword2(e.target.value);
             }}
+            onKeyDown={preventSpace}
           />
         </div>
-
+        {errorMessage != "" && (
+          <p style={{ color: "red", fontSize: "15px", margin: "0px" }}>
+            **{errorMessage}**
+          </p>
+        )}
         <div className={styles["button-div"]}>
           <button
             type="button"
